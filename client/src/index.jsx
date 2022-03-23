@@ -11,14 +11,26 @@ class App extends React.Component {
     this.state = {
       repos: []
     }
-
   }
 
+  componentDidMount () {
+    axios.get('/repos')
+      .then(repos => {
+        this.setState({repos: repos.data})
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
   search (userName) {
     console.log(`${userName} was searched`);
     axios.post('/repos', {user: `${userName}`})
       .then (response => {
         console.log(response);
+      })
+      .then(() => {
+        axios.get('/repos')
+        .then(repos => this.setState({repos: repos.data}))
       })
       .catch (err => {
         console.log(err);
@@ -28,8 +40,8 @@ class App extends React.Component {
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
-      <RepoList repos={this.state.repos}/>
       <Search onSearch={this.search.bind(this)}/>
+      <RepoList repos={this.state.repos}/>
     </div>)
   }
 }

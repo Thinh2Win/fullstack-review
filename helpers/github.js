@@ -2,7 +2,7 @@ const axios = require('axios');
 const config = require('../config.js');
 const Promise = require('bluebird');
 
-var getReposByUsername = (userName, callback) => {
+var getReposByUsername = (userName) => {
   let options = {
     method: 'get',
     headers: {
@@ -12,13 +12,7 @@ var getReposByUsername = (userName, callback) => {
     url: `https://api.github.com/users/${userName}/repos`,
   };
 
-  axios(options)
-    .then(repos => {
-      callback(repos.data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  return axios(options);
 
 };
 
